@@ -45,6 +45,7 @@ export default function LeadGate({ ferramenta, titulo, subtitulo, botao = "VER M
     } catch (err) {
       console.warn("Lead não salvo", err);
     }
+    try { if (window.fbq) window.fbq("track", "Lead", { content_name: ferramenta }); } catch { /* sem pixel */ }
     writeUnlocked(ferramenta, nomeLimpo);
     setEnviando(false);
     onUnlock(nomeLimpo);

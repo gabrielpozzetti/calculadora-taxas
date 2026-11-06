@@ -115,7 +115,7 @@ export default function App() {
   const [patrimonio, setPatrimonio] = useState(500000);
   const [aporte, setAporte] = useState(3000);
   const [taxaAssessor, setTaxaAssessor] = useState(2.0);
-  const [taxaConsultor, setTaxaConsultor] = useState(0.5);
+  const [taxaConsultor, setTaxaConsultor] = useState(1.0);
   const [horizonte, setHorizonte] = useState(20);
   const [retornoBruto, setRetornoBruto] = useState(12);
   const [showCTA, setShowCTA] = useState(false);
@@ -199,7 +199,7 @@ export default function App() {
             min={0.5} max={4} step={0.1} icon="🏦"
             format={(v) => `${v.toFixed(1)}% a.a.`} sublabel="Administração + performance + rebate + spread" />
           <Slider label="Taxa do Consultor Independente" value={taxaConsultor} onChange={setTaxaConsultor}
-            min={0.1} max={1.5} step={0.1} icon="🎯"
+            min={0.1} max={2.5} step={0.1} icon="🎯"
             format={(v) => `${v.toFixed(1)}% a.a.`} sublabel="Fee-only, sem comissão" />
           <Slider label="Horizonte" value={horizonte} onChange={setHorizonte}
             min={5} max={30} step={1} icon="⏳"

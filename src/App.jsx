@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import LeadGate from "./LeadGate.jsx";
+import { readUnlocked } from "./leads.js";
 
 const GOLD = "#C9A84C";
 const NAVY = "#0D1B2A";
@@ -117,6 +119,7 @@ export default function App() {
   const [horizonte, setHorizonte] = useState(20);
   const [retornoBruto, setRetornoBruto] = useState(12);
   const [showCTA, setShowCTA] = useState(false);
+  const [lead, setLead] = useState(() => readUnlocked("calculadora-taxas"));
 
   useEffect(() => {
     const timer = setTimeout(() => setShowCTA(true), 3000);
@@ -204,6 +207,21 @@ export default function App() {
         </div>
 
         {/* Results */}
+        {!lead ? (
+          <LeadGate
+            ferramenta="calculadora-taxas"
+            titulo="Informe seu nome e WhatsApp para ver quanto as taxas custam ao seu patrimônio."
+            subtitulo="Ajuste os valores acima quando quiser. Depois de liberado, o cálculo atualiza na hora."
+            botao="VER MEU CÁLCULO"
+            getResultado={() => ({
+              patrimonio, aporte_mensal: aporte, retorno_bruto: retornoBruto,
+              taxa_assessor: taxaAssessor, taxa_consultor: taxaConsultor, horizonte,
+              final_consultor: Math.round(finalConsultor), final_assessor: Math.round(finalAssessor),
+              perda_total: Math.round(perdaTotal), perda_pct: Math.round(perdaPct),
+            })}
+            onUnlock={(nome) => setLead({ nome })}
+          />
+        ) : (
         <div style={{ background: "white", borderRadius: "16px", padding: "1.8rem", boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04)", border: "1px solid #E5E7EB" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.2rem" }}>
             <div style={{ width: "4px", height: "24px", background: TEAL, borderRadius: "2px" }} />
@@ -276,7 +294,7 @@ export default function App() {
             </div>
             <a
               href={`https://wa.me/5541998817220?text=${encodeURIComponent(
-                `Olá Gabriel! Usei a Calculadora de Impacto de Taxas e quero um diagnóstico da minha carteira.\n\n` +
+                `Olá Gabriel! ${lead ? `Aqui é ${lead.nome}. ` : ""}Usei a Calculadora de Impacto de Taxas e quero um diagnóstico da minha carteira.\n\n` +
                 `📊 Meus dados:\n` +
                 `• Patrimônio atual: ${formatBRL(patrimonio)}\n` +
                 `• Aporte mensal: ${formatBRL(aporte)}\n` +
@@ -309,13 +327,14 @@ export default function App() {
               Seus dados da simulação já vão junto na mensagem
             </div>
             <div style={{ borderTop: "1px solid #ffffff15", marginTop: "0.8rem", paddingTop: "0.8rem", display: "flex", justifyContent: "center", gap: "1rem" }}>
-              <a href="https://www.instagram.com/gabrielinveste" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.instagram.com/gabrielinveste_" target="_blank" rel="noopener noreferrer"
                 style={{ fontSize: "0.72rem", color: GOLD, textDecoration: "none", fontWeight: "600" }}>
                 📸 Instagram
               </a>
             </div>
           </div>
         </div>
+        )}
 
         {/* Disclaimer */}
         <div style={{ fontSize: "0.65rem", color: "#9CA3AF", textAlign: "center", padding: "0.5rem 1rem", lineHeight: "1.6" }}>
